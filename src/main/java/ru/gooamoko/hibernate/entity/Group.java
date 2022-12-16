@@ -5,6 +5,12 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@NamedEntityGraph(
+        name = "with-students",
+        attributeNodes = {
+                @NamedAttributeNode("students")
+        }
+)
 @Entity
 @Table(name = "GROUPS")
 public class Group {
@@ -18,7 +24,7 @@ public class Group {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "GRP_SPC_ID")
+    @JoinColumn(name = "GRP_SPC_ID", nullable = false)
     private Speciality speciality;
 
     @Column(name = "GRP_CREATE_TS", nullable = false)

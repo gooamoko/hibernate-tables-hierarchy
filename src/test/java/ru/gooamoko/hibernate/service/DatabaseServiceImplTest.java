@@ -7,7 +7,6 @@ import ru.gooamoko.hibernate.entity.Group;
 import ru.gooamoko.hibernate.entity.Speciality;
 import ru.gooamoko.hibernate.entity.Student;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,15 +55,19 @@ class DatabaseServiceImplTest {
         assertNotNull(groups);
         assertEquals(3, groups.size());
 
+        Group firstGroup = groups.get(0);
+        List<Student> students = firstGroup.getStudents();
+        assertNotNull(students);
+        assertEquals(5, students.size());
+
         // А теперь выберем группы для какой-то специальности.
         List<Group> specialityGroups = databaseService.getSpecialityGroups(speciality);
         assertNotNull(specialityGroups);
         assertEquals(3, specialityGroups.size());
-    }
 
-    private List<Group> appendGroups(List<Group> groups, Group newGroup) {
-        List<Group> resultGroups = (groups == null || groups.isEmpty()) ? new LinkedList<>() : new LinkedList<>(groups);
-        resultGroups.add(newGroup);
-        return resultGroups;
+        firstGroup = specialityGroups.get(0);
+        students = firstGroup.getStudents();
+        assertNotNull(students);
+        assertEquals(5, students.size());
     }
 }

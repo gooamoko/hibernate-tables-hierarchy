@@ -22,7 +22,7 @@ public class Student {
     private String lastName;
 
     @ManyToOne
-    @JoinColumn(name = "STD_GRP_ID")
+    @JoinColumn(name = "STD_GRP_ID", nullable = false)
     private Group group;
 
     @Column(name = "STD_CREATE_TS", nullable = false)

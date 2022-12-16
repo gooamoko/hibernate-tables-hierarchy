@@ -5,6 +5,20 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@NamedEntityGraph(
+        name = "with-children",
+        attributeNodes = {
+                @NamedAttributeNode(value = "groups", subgraph = "groups-with-students")
+        },
+        subgraphs = {
+                @NamedSubgraph(
+                        name = "groups-with-students",
+                        attributeNodes = {
+                                @NamedAttributeNode("students")
+                        }
+                )
+        }
+)
 @Entity
 @Table(name = "SPECIALITIES")
 public class Speciality {

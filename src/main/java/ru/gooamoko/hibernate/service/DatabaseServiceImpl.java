@@ -1,5 +1,6 @@
 package ru.gooamoko.hibernate.service;
 
+import jakarta.persistence.EntityGraph;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Service;
 import ru.gooamoko.hibernate.entity.Group;
@@ -9,9 +10,11 @@ import ru.gooamoko.hibernate.repository.GroupsRepository;
 import ru.gooamoko.hibernate.repository.SpecialitiesRepository;
 import ru.gooamoko.hibernate.repository.StudentsRepository;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
 @Service
 public class DatabaseServiceImpl implements DatabaseService {
     private final EntityManager entityManager;
@@ -34,12 +37,16 @@ public class DatabaseServiceImpl implements DatabaseService {
 
     @Override
     public Optional<Speciality> getSpecialityWithChildren(Long id) {
-        return Optional.empty();
+        EntityGraph<?> entityGraph = entityManager.getEntityGraph("with-children");
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("javax.persistence.loadgraph", entityGraph);
+        Speciality speciality = entityManager.find(Speciality.class, id, properties);
+        return Optional.ofNullable(speciality);
     }
 
     @Override
     public List<Group> getSpecialityGroups(Speciality speciality) {
-        return Collections.emptyList();
+        return groupsRepository.getBySpeciality(speciality);
     }
 
     @Override
